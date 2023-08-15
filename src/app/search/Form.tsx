@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { addToQueue, search } from "@/server/action";
-import WebPlayer from "@/components/WebPlayer";
+import { addToQueue, search } from "@/server/actions";
+import { SearchResults, Track } from "@spotify/web-api-ts-sdk";
 
-export default function Form({ token }) {
-  const [data, setData] = useState<any>();
-  const [track, setTrack] = useState<any>();
+export default function Form() {
+  const [data, setData] = useState<SearchResults>();
+  const [track, setTrack] = useState<Track>();
 
   async function handleSearch(formData: FormData) {
     const query = formData.get("query") as string;
@@ -20,11 +20,9 @@ export default function Form({ token }) {
         <input type="search" className="outline" name="query" />
       </form>
 
-      <WebPlayer token={token} />
-
       {data && (
         <div>
-          {data.tracks.items.map((ele: any) => (
+          {data.tracks.items.map((ele) => (
             <div
               key={ele.id}
               onClick={() => {

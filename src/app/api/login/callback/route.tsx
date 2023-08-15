@@ -1,5 +1,6 @@
-import { Token } from "@/app/api/types";
 import { NextResponse } from "next/server";
+import { CookieKeys } from "@/server/getCookies";
+import { AccessToken } from "@spotify/web-api-ts-sdk";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -22,7 +23,7 @@ export async function GET(request: Request) {
 
       if (!res.ok) throw new Error("Spotify Server Error");
 
-      return (await res.json()) as Token;
+      return (await res.json()) as AccessToken;
     };
 
     const token = await getToken();
@@ -32,22 +33,13 @@ export async function GET(request: Request) {
     const response = NextResponse.redirect(url);
 
     response.cookies.set({
-      name: "access_token",
-      value: token.access_token,
+      name: "spotify_token" as CookieKeys,
+      value: JSON.stringify(token),
       httpOnly: true,
       sameSite: "strict",
       secure: true,
       path: "/",
       maxAge: token.expires_in,
-    });
-
-    response.cookies.set({
-      name: "refresh_token",
-      value: token.refresh_token,
-      httpOnly: true,
-      sameSite: "strict",
-      secure: true,
-      path: "/",
     });
 
     return response;
