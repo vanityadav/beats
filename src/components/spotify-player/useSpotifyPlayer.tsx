@@ -44,6 +44,7 @@ export default function useSpotifyPlayer(token: string | undefined) {
 
       player.addListener("not_ready", ({ device_id }) => {
         dispatch(setDeviceError(device_id));
+        console.log("not ready");
       });
 
       player.addListener("player_state_changed", (state) => {

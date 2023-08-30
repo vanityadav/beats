@@ -5,6 +5,7 @@ import { StoreProvider } from "@/redux";
 import { Inter } from "next/font/google";
 import { getCookies } from "@/server/getCookies";
 import { QueryClientProvider } from "@/react-query";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { SpotifyMusicPlayer } from "@/components/spotify-player";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -25,10 +26,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <StoreProvider>
           <QueryClientProvider>
-            <Auth>
-              {children}
-              <SpotifyMusicPlayer token={cookieToken} />
-            </Auth>
+            <TooltipProvider delayDuration={400} skipDelayDuration={200}>
+              <Auth>
+                {children}
+                <SpotifyMusicPlayer token={cookieToken} />
+              </Auth>
+            </TooltipProvider>
           </QueryClientProvider>
         </StoreProvider>
       </body>
