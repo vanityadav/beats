@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 
 type Props = { track: Spotify.Track | undefined };
@@ -6,8 +8,8 @@ export default function CurrentTrack({ track }: Props) {
   if (track)
     return (
       <div className="main-wrapper">
-        <Image
-          src={track?.album.images[2].url}
+        <img
+          src={track?.album.images[0].url}
           className="now-playing__cover"
           alt=""
         />
