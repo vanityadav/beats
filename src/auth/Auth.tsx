@@ -1,14 +1,14 @@
 import { ReactNode } from "react";
 import AuthClient from "./AuthClient";
-import { getCookies } from "@/server/getCookies";
+import { getSpotifyAccessToken } from "@/server/getCookies";
 
 type Props = {
   children: ReactNode;
 };
 
 export default async function Auth({ children }: Props) {
-  const { cookieToken } = getCookies();
-  if (cookieToken) return <>{children}</>;
+  const token = getSpotifyAccessToken();
+  if (token) return <>{children}</>;
   return (
     <AuthClient>
       <>{children}</>

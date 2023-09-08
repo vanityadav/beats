@@ -17,28 +17,24 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import CurrentTrack from "./CurrentTrack";
+import Seek from "./Seek";
 
 type Props = {
   token: string | undefined;
 };
 
 export default function SpotifyPlayer({ token }: Props) {
-  const {
-    deviceId,
-    player,
-    online,
-    errorMessage,
-    defaultVolume,
-    playbackState,
-  } = useSpotifyPlayer(token);
-  console.log(errorMessage, playbackState, deviceId, online);
+  const { player, errorMessage, defaultVolume, playbackState } =
+    useSpotifyPlayer(token);
+  // console.log(errorMessage, playbackState);
   return (
-    <div className="p-2 fixed left-0 right-0 bottom-0 bg-blue-700 flex items-center gap-12">
+    <div className="p-2 fixed left-0 right-0 bottom-0 flex items-center gap-12 border-t bg-white">
       <CurrentTrack track={playbackState?.track_window.current_track} />
       <div className="flex gap-6 justify-between items-center ">
+        <Seek player={player} playbackState={playbackState} />
         <div className="flex gap-2 items-center">
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
@@ -54,7 +50,7 @@ export default function SpotifyPlayer({ token }: Props) {
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
@@ -70,7 +66,7 @@ export default function SpotifyPlayer({ token }: Props) {
           </Tooltip>
 
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"

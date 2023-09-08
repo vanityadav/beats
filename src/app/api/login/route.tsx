@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { AccessToken } from "@spotify/web-api-ts-sdk";
-import { CookieKeys, getCookies } from "@/server/getCookies";
+import { CookieKeys, getSpotifyAccessToken } from "@/server/getCookies";
 
 export const revalidate = 0;
 
 export async function GET() {
-  const { cookieToken } = getCookies();
+  const token = getSpotifyAccessToken();
 
-  if (cookieToken) return NextResponse.json("loggedIn");
+  if (token) return NextResponse.json("loggedIn");
   else {
     const getToken = async () => {
       const res = await fetch(process.env.SPOTIFY_AUTH_API + "api/token", {
@@ -31,7 +31,7 @@ export async function GET() {
       name: "spotify_token" as CookieKeys,
       value: JSON.stringify(token),
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: true,
       secure: true,
       path: "/",
       maxAge: token.expires_in,

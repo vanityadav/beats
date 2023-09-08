@@ -4,12 +4,16 @@ import { useState } from "react";
 import { addToQueue, search } from "@/server/actions";
 import { SearchResults, Track } from "@spotify/web-api-ts-sdk";
 
+import { useRouter, useSearchParams } from "next/navigation";
+
 export default function Form() {
   const [data, setData] = useState<SearchResults>();
   const [track, setTrack] = useState<Track>();
+  const router = useRouter();
 
   async function handleSearch(formData: FormData) {
     const query = formData.get("query") as string;
+    router.push(`search/?q=${query}`);
     const res = await search(query);
     if (res) setData(res);
   }

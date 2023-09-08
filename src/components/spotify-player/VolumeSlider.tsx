@@ -20,7 +20,7 @@ export default function VolumeSlider({ player, defaultVolume }: Props) {
   return (
     <div className="flex items-center gap-2">
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <Button
             variant="ghost"
             size="icon"

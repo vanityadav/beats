@@ -1,12 +1,10 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux";
 import {
-  setDeviceId,
   setDeviceError,
   setError,
   setPlayer,
-  setConnected,
-  setVolume,
+  setDefaultVolume,
   setPlaybackState,
 } from "@/redux/features/spotifyPlayer";
 import { setDeviceIdServer } from "@/server/actions/action";
@@ -37,14 +35,13 @@ export default function useSpotifyPlayer(token: string | undefined) {
       dispatch(setPlayer(player));
 
       player.addListener("ready", ({ device_id }) => {
-        dispatch(setDeviceId(device_id));
-        console.log("Device is", device_id);
+        console.log("Device is ready", device_id);
         setDeviceIdServer(device_id);
       });
 
       player.addListener("not_ready", ({ device_id }) => {
         dispatch(setDeviceError(device_id));
-        console.log("not ready");
+        console.log("Device is not ready");
       });
 
       player.addListener("player_state_changed", (state) => {
@@ -56,7 +53,7 @@ export default function useSpotifyPlayer(token: string | undefined) {
       });
 
       player.getVolume().then((volume) => {
-        dispatch(setVolume(volume));
+        dispatch(setDefaultVolume(volume));
       });
 
       player.addListener("autoplay_failed", () => {
@@ -81,10 +78,10 @@ export default function useSpotifyPlayer(token: string | undefined) {
 
       player.connect().then((success) => {
         if (success) {
-          dispatch(setConnected());
           console.log("Connected Success");
         }
       });
+
       player.activateElement();
     };
 

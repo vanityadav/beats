@@ -5,21 +5,22 @@ import { AccessToken } from "@spotify/web-api-ts-sdk";
 
 export type CookieKeys = "deviceId" | "spotify_token";
 
-function getCookies() {
-  const newCookies = (key: CookieKeys) =>
-    cookies().get(key as CookieKeys)?.value;
-
-  const tokenData = newCookies("spotify_token");
-
-  const cookieAccessToken = tokenData
-    ? (JSON.parse(tokenData) as AccessToken)
-    : null;
-
-  const cookieToken = cookieAccessToken?.access_token;
-
-  const cookieDeviceId = newCookies("deviceId");
-
-  return { cookieAccessToken, cookieToken, cookieDeviceId, newCookies };
+function browserCookies(key: CookieKeys) {
+  return cookies().get(key as CookieKeys)?.value;
 }
 
-export default getCookies;
+function getSpotifyToken() {
+  return JSON.parse(
+    browserCookies("spotify_token") || "null"
+  ) as AccessToken | null;
+}
+
+function getSpotifyAccessToken() {
+  return getSpotifyToken()?.access_token;
+}
+
+function getDeviceId() {
+  return browserCookies("deviceId");
+}
+
+export { browserCookies, getSpotifyToken, getSpotifyAccessToken, getDeviceId };

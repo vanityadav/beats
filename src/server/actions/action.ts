@@ -2,17 +2,16 @@
 
 import { cookies } from "next/headers";
 import { spotifyAPI } from "@/server/spotify";
-import { CookieKeys, getCookies } from "../getCookies";
-
-const { cookieDeviceId } = getCookies();
+import { CookieKeys, getDeviceId } from "../getCookies";
 
 export async function search(query: string) {
   return await spotifyAPI?.search(query, ["track"]);
 }
 
 export async function addToQueue(uri: string) {
-  if (cookieDeviceId) {
-    spotifyAPI?.player.startResumePlayback(cookieDeviceId, undefined, [uri]);
+  const deviceId = getDeviceId();
+  if (deviceId) {
+    spotifyAPI?.player.startResumePlayback(deviceId, undefined, [uri]);
   }
 }
 
@@ -28,8 +27,8 @@ export async function setDeviceIdServer(deviceId: string) {
     name: "deviceId" as CookieKeys,
     value: deviceId,
     httpOnly: true,
-    path: "/",
     sameSite: true,
     secure: true,
+    path: "/",
   });
 }

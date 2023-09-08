@@ -1,10 +1,10 @@
-import { getCookies } from "../getCookies";
+import { getSpotifyToken } from "../getCookies";
 import { SpotifyApi } from "@spotify/web-api-ts-sdk";
 
-const { cookieAccessToken } = getCookies();
+const spotifyToken = getSpotifyToken();
 
-const api = cookieAccessToken
-  ? SpotifyApi.withAccessToken(process.env.CLIENT_ID, cookieAccessToken)
+const api = spotifyToken
+  ? SpotifyApi.withAccessToken(process.env.CLIENT_ID, spotifyToken)
   : null;
 
 export default api;
